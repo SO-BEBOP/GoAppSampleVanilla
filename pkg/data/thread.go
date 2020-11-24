@@ -112,6 +112,35 @@ func ThreadByUUID(uuid string) (conv Thread, err error) {
 	conv = Thread{}
 	err = Db.QueryRow("SELECT id, uuid, topic, user_id, created_at FROM threads WHERE uuid = $1", uuid).
 		Scan(&conv.Id, &conv.Uuid, &conv.Topic, &conv.UserId, &conv.CreatedAt)
+
+	return
+}
+
+// DeletePost from database
+func DeletePost(thrid int) {
+
+	statement := "DELETE from posts where thread_id = $1"
+	stmt, err := Db.Prepare(statement)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(thrid)
+
+	return
+}
+
+// DeleteThread from database
+func DeleteThread(uuid string) {
+
+	statement := "delete from threads where uuid = $1"
+	stmt, err := Db.Prepare(statement)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(uuid)
+
 	return
 }
 

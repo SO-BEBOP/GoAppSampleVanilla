@@ -1,23 +1,53 @@
 {{ define "content" }}
+
 <p class="lead">
-  <!-- <a href="/thread/new">スレッドを開始するか</a>  -->
-  <!-- <a href="/thread/new">スレッドを開始するか</a>  -->
-  <!-- <button type="button" class="btn btn-success" href="/thread/new">新規スレッドを開始する</button> -->
   <a role="button" type="button" class="btn btn-success" href="/thread/new">新規スレッドを開始する</a>
+  <span class="pull-right">
+    User :
+    {{ if eq .LoginState "ture" }}
+    {{ .Session.Name }}
+    {{else}}
+    Guest user
+    {{end}}
+  </span>
 </p>
 
-{{ range . }}
+{{ if eq .LoginState "ture" }}
+{{ range .Data }}
 <div class="panel panel-default">
   <div class="panel-heading">
-    <span class="lead"> <i class="fa fa-comment-o"></i> {{ .Topic }}</span>
+    <span class="lead"> <i class="fa fa-comment-o"></i>
+      {{ .Topic }}
+    </span>
+    <a type="" class="pull-right center-block text-danger" href="/thread/delete?id={{.Uuid }}">削除</a>
   </div>
-  <div class="panel-body">
+
+  <div class=" panel-body">
     開始ユーザー {{ .User.Name }} - 開始日 {{ .CreatedAtDate }} - 投稿数 {{ .NumReplies }}。
+
     <div class="pull-right">
       <a href="/thread/read?id={{.Uuid }}">もっと読む</a>
     </div>
   </div>
 </div>
 {{ end }}
+{{else}}
+{{ range .Data }}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <span class="lead"> <i class="fa fa-comment-o"></i>
+      {{ .Topic }}
+    </span>
+  </div>
+  <div class=" panel-body">
+    開始ユーザー {{ .User.Name }} - 開始日 {{ .CreatedAtDate }} - 投稿数 {{ .NumReplies }}。
 
+    <div class="pull-right">
+      <a href="/thread/read?id={{.Uuid }}">もっと読む</a>
+    </div>
+  </div>
+</div>
+{{ end }}
+{{ end }}
+<h2>{{ .User }}</h2>
 {{ end }}
