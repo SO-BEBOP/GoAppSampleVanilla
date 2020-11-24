@@ -90,7 +90,6 @@ func GenerateHTML(writer http.ResponseWriter, data interface{}, filenames ...str
 	for _, file := range filenames {
 		files = append(files, fmt.Sprintf("web/templates/%s.html", file))
 	}
-
 	templates := template.Must(template.ParseFiles(files...))
 	templates.ExecuteTemplate(writer, "layout", data)
 }

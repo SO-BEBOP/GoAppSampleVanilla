@@ -4,6 +4,7 @@ import (
 	"GoAppSampleVanilla/pkg/data"
 	"GoAppSampleVanilla/pkg/utils"
 	"fmt"
+
 	"net/http"
 )
 
@@ -85,5 +86,23 @@ func PostThread(writer http.ResponseWriter, request *http.Request) {
 		}
 		url := fmt.Sprint("/thread/read?id=", uuid)
 		http.Redirect(writer, request, url, 302)
+	}
+}
+
+// DeletePostThread ...POST /thread/delete
+// Derlete the post & the thread data.
+func DeletePostThread(writer http.ResponseWriter, request *http.Request) {
+	vals := request.URL.Query()
+	uuid := vals.Get("id")
+	// uuid := request.PostFormValue("uuid")
+	thread, err := data.ThreadByUUID(uuid)
+	data.DeletePost(thread.Id)
+	data.DeleteThread(uuid)
+
+	if err != nil {
+		utils.ErrorMsg(writer, request, "Cannot read thread")
+	} else {
+		http.Redirect(writer, request, "/", 302)
+
 	}
 }
